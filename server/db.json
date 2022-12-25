@@ -1,0 +1,26 @@
+{
+  "users": [
+    {
+      "user": {
+        "firstName": "edward",
+        "lastName": "konovalov",
+        "mail": "crfn@mail.ru",
+        "password": "1q2w3e4r",
+        "role": "admin",
+        "token": "edward.konovalov.crfn@mail.ru"
+      },
+      "id": 0
+    },
+    {
+      "user": {
+        "firstName": "edward",
+        "lastName": "konovalov",
+        "mail": "Crf222n@mail.ru",
+        "password": "1q2w3e4r",
+        "role": "user",
+        "token": "x5kz7n4pfsmtrofmjonl66l1iecj2gw4"
+      },
+      "id": 1
+    }
+  ]
+}

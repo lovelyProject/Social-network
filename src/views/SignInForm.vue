@@ -8,7 +8,6 @@
           class="form__input"
           type="email"
           name=""
-          id=""
           placeholder="rosemarie@domain.com"
           v-model="form.mail"
           :class="{
@@ -28,7 +27,6 @@
           type="password"
           class="form__input"
           name=""
-          id=""
           placeholder="********"
           v-model="form.password"
           :class="{
@@ -44,10 +42,17 @@
       </div>
       <div class="form__content toggle-block">
         <p>Don't have an account yet?</p>
-        <router-link to="/signUp">Sign up</router-link>
+        <router-link :to="{ name: 'signUp' }" id="purple-text"
+          >Sign up</router-link
+        >
       </div>
       <div class="form__content btn-submit-block">
-        <input type="submit" value="Sign in" class="btn-submit" />
+        <input
+          type="submit"
+          value="Sign in"
+          class="btn-submit"
+          :disabled="isSubmiting"
+        />
       </div>
     </form>
   </div>
@@ -56,6 +61,7 @@
 <script>
 import { useVuelidate } from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
+import { actionTypes } from "@/store/modules/auth";
 export default {
   setup() {
     return { v$: useVuelidate() };
@@ -81,6 +87,21 @@ export default {
     checkForm() {
       this.v$.form.$touch();
       this.v$.form.$error ? "" : (this.form.isSucces = true);
+      if (this.form.isSucces) {
+        this.$store
+          .dispatch(actionTypes.login, {
+            mail: this.form.mail,
+            password: this.form.password,
+          })
+          .then(() => {
+            this.$router.push({ name: "profile" });
+          });
+      }
+    },
+  },
+  computed: {
+    isSubmiting() {
+      return this.$store.state.auth.isSubmiting;
     },
   },
 };
@@ -155,4 +176,6 @@ export default {
   margin-left: 2rem
 .has-error
   box-shadow: 0 0 .1rem .1rem red
+#purple-text
+  color: #4623E9
 </style>

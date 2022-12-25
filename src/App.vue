@@ -2,10 +2,17 @@
   <div>
     <header class="header">
       <div class="header-container">
-        <div class="header__logo">
+        <router-link
+          class="header__logo"
+          :to="{ name: 'profile' }"
+          id="header-logo"
+        >
           H<span style="color: #5932ea">a</span>ndshake
-        </div>
-        <router-link class="header__sign-in" to="/signIn" id="sign-in-link"
+        </router-link>
+        <router-link
+          class="header__sign-in"
+          :to="{ name: 'signIn' }"
+          id="sign-in-link"
           >Sign in</router-link
         >
       </div>
@@ -19,9 +26,9 @@
           <h1>Jessica</h1>
           <span>YOU</span>
         </div>
-        <hr />
+        <hr class="menu-line" />
         <!-- My profile -->
-        <router-link class="menu__item" to="/"
+        <router-link class="menu__item" :to="{ name: 'profile' }"
           ><svg
             class="menu__item-icon"
             viewBox="0 0 8 8"
@@ -47,7 +54,7 @@
           </svg>
         </router-link>
         <!-- My messages -->
-        <router-link class="menu__item" to="/signIn">
+        <router-link class="menu__item" to="">
           <svg
             class="menu__item-icon"
             viewBox="0 0 24 24"
@@ -73,7 +80,7 @@
           </svg>
         </router-link>
         <!-- My friends -->
-        <router-link class="menu__item" to="/signIn"
+        <router-link class="menu__item" to=""
           ><svg
             class="menu__item-icon"
             viewBox="0 0 24 24"
@@ -111,7 +118,7 @@
           </svg>
         </router-link>
         <!-- News -->
-        <router-link class="menu__item" to="/signIn"
+        <router-link class="menu__item" to=""
           ><svg
             class="menu__item-icon"
             version="1.1"
@@ -183,7 +190,15 @@
     </div>
   </div>
 </template>
-
+<script>
+export default {
+  computed: {
+    isLogIn() {
+      return this.$store.state.isLoggedIn;
+    },
+  },
+};
+</script>
 <style lang="sass">
 *, ::after, ::before
   margin: 0
@@ -195,6 +210,7 @@ h1,h2,h3,h4,h5,h6,span,p
 html
   font-size: 62.5%
 a
+  color: black
   text-decoration: none
 #app
   @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap")
@@ -203,7 +219,7 @@ a
 .general-block
   display: flex
   max-width: 192rem
-  margin: 0 auto
+  margin: 9rem auto 0 auto
   padding: 0 1.5rem
 .menu
   width: 30rem
@@ -265,8 +281,11 @@ a
 .header
   font-size: 1.6rem
   padding: 2rem 1.5rem
-  margin-bottom: 3rem
   box-shadow: 0 .3rem .4rem 0 #d3d3d3
+  position: fixed
+  top: 0
+  width: 100%
+  background-color: #fff
   &-container
     max-width: 192rem
     display: flex
@@ -281,4 +300,9 @@ a
   color: #5932EA
 .header__sign-in:hover
   opacity: 0.7
+#header-logo
+  background-color: white
+  color: black
+.menu-line
+  margin-bottom: 2rem
 </style>

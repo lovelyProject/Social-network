@@ -102,7 +102,9 @@
       </div>
       <div class="form__content toggle-block">
         <p>Already have an account?</p>
-        <router-link to="/signIn">Sign in</router-link>
+        <router-link :to="{ name: 'signIn' }" style="color: #4623e9"
+          >Sign in</router-link
+        >
       </div>
       <div class="form__content btn-submit-block">
         <button
@@ -121,8 +123,9 @@
 <script>
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, sameAs, minLength } from "@vuelidate/validators";
+import { generateToken } from "@/helpers/getRandom";
+import { actionTypes } from "@/store/modules/auth";
 export default {
-  name: "signUp",
   setup() {
     return { v$: useVuelidate() };
   },
@@ -155,12 +158,24 @@ export default {
     },
   },
   methods: {
-    onSubmit() {
-      this.$store.commit("registerStart");
-    },
     checkForm() {
       this.v$.form.$touch();
       this.v$.form.$error ? "" : (this.form.isSucces = true);
+      //После правильного ввода данных, отправляется запрос
+      if (this.form.isSucces) {
+        this.$store
+          .dispatch(actionTypes.register, {
+            firstName: this.form.firstName,
+            lastName: this.form.lastName,
+            mail: this.form.mail,
+            password: this.form.password,
+            role: "user",
+            token: generateToken(),
+          })
+          .then(() => {
+            this.$router.push({ name: "profile" });
+          });
+      }
     },
   },
 };
