@@ -10,15 +10,42 @@
           H<span style="color: #5932ea">a</span>ndshake
         </router-link>
         <router-link
+          v-if="!isLogIn"
           class="header__sign-in"
           :to="{ name: 'signIn' }"
           id="sign-in-link"
           >Sign in</router-link
         >
+        <router-link
+          v-if="isLogIn"
+          class="header__sign-in"
+          :to="{ name: 'signIn' }"
+          id="Log-out"
+          @click="logOut"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon-log-out"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" />
+            <path
+              d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"
+            />
+            <path d="M7 12h14l-3 -3m0 6l3 -3" />
+          </svg>
+
+          <span>Log out</span></router-link
+        >
       </div>
     </header>
     <div class="general-block">
-      <nav class="menu">
+      <nav class="menu" v-if="isLogIn">
         <div class="profile-photo">
           <img src="./assets/pics/profile-photo.png" alt="profile-photo" />
         </div>
@@ -54,7 +81,7 @@
           </svg>
         </router-link>
         <!-- My messages -->
-        <router-link class="menu__item" to="">
+        <router-link class="menu__item" to="{ name: '' }">
           <svg
             class="menu__item-icon"
             viewBox="0 0 24 24"
@@ -80,7 +107,7 @@
           </svg>
         </router-link>
         <!-- My friends -->
-        <router-link class="menu__item" to=""
+        <router-link class="menu__item" to="{ name: '' }"
           ><svg
             class="menu__item-icon"
             viewBox="0 0 24 24"
@@ -118,7 +145,7 @@
           </svg>
         </router-link>
         <!-- News -->
-        <router-link class="menu__item" to=""
+        <router-link class="menu__item" to="{ name: '' }"
           ><svg
             class="menu__item-icon"
             version="1.1"
@@ -194,9 +221,14 @@
 export default {
   computed: {
     isLogIn() {
-      return this.$store.state.isLoggedIn;
+      return this.$store.state.auth.isLoggedIn;
     },
   },
+  // methods: {
+  //   logOut() {
+  //     this.$store.commit(mutationTypes.logOut)
+  //   }
+  // }
 };
 </script>
 <style lang="sass">
@@ -305,4 +337,15 @@ a
   color: black
 .menu-line
   margin-bottom: 2rem
+#Log-out
+  color: red
+  display: flex
+  align-items: center
+  cursor: pointer
+  span
+    cursor: pointer
+.icon-log-out
+  width: 3.2rem
+  margin-right: .8rem
+  cursor: pointer
 </style>

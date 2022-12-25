@@ -10,12 +10,13 @@
           name=""
           placeholder="Rosemarie"
           v-model="form.firstName"
+          :disabled="isSubmiting"
         />
         <p
           class="form-error"
           v-if="v$.form.firstName.required.$invalid && v$.form.$dirty"
         >
-          Обязательное поле
+          Required field
         </p>
       </div>
       <div class="form__input-block">
@@ -26,12 +27,13 @@
           name=""
           placeholder="Richardson"
           v-model="form.lastName"
+          :disabled="isSubmiting"
         />
         <p
           class="form-error"
           v-if="v$.form.lastName.required.$invalid && v$.form.$dirty"
         >
-          Обязательное поле
+          Required field
         </p>
       </div>
       <div class="form__input-block">
@@ -42,18 +44,22 @@
           name=""
           placeholder="rosemarie@domain.com"
           v-model="form.mail"
+          :disabled="isSubmiting"
         />
+        <p class="form-error" v-if="invalidMail">
+          This email is already in use
+        </p>
         <p
           class="form-error"
           v-if="v$.form.mail.required.$invalid && v$.form.$dirty"
         >
-          Обязательное поле
+          Required field
         </p>
         <p
           class="form-error"
           v-if="v$.form.mail.email.$invalid && v$.form.$dirty"
         >
-          Неверный формат почты
+          Invalid mail format
         </p>
       </div>
       <div class="form__input-block">
@@ -64,18 +70,19 @@
           name=""
           placeholder="********"
           v-model="form.password"
+          :disabled="isSubmiting"
         />
         <p
           class="form-error"
           v-if="v$.form.password.required.$invalid && v$.form.$dirty"
         >
-          Обязательное поле
+          Required field
         </p>
         <p
           class="form-error"
           v-if="v$.form.password.minLength.$invalid && v$.form.$dirty"
         >
-          Пароль должен быть длиннее 8 символов
+          Password must be longer than 8 symbols
         </p>
       </div>
       <div class="form__input-block">
@@ -86,18 +93,19 @@
           name=""
           placeholder="********"
           v-model="form.confirmPassword"
+          :disabled="isSubmiting"
         />
         <p
           class="form-error"
           v-if="v$.form.confirmPassword.required.$invalid && v$.form.$dirty"
         >
-          Обязательное поле
+          Required field
         </p>
         <p
           class="form-error"
           v-if="v$.form.confirmPassword.sameAs.$invalid && v$.form.$dirty"
         >
-          Пароли не совпадают
+          Passwords don't match
         </p>
       </div>
       <div class="form__content toggle-block">
@@ -156,6 +164,12 @@ export default {
     isSubmiting() {
       return this.$store.state.auth.isSubmiting;
     },
+    invalidLogin() {
+      return this.$store.state.auth.invalidLoginOrPass;
+    },
+    invalidMail() {
+      return this.$store.state.auth.findMail;
+    },
   },
   methods: {
     checkForm() {
@@ -163,17 +177,27 @@ export default {
       this.v$.form.$error ? "" : (this.form.isSucces = true);
       //После правильного ввода данных, отправляется запрос
       if (this.form.isSucces) {
+        //Проверка зарегистрирована ли такая почта
         this.$store
-          .dispatch(actionTypes.register, {
-            firstName: this.form.firstName,
-            lastName: this.form.lastName,
+          .dispatch(actionTypes.checkMail, {
             mail: this.form.mail,
-            password: this.form.password,
-            role: "user",
-            token: generateToken(),
           })
-          .then(() => {
-            this.$router.push({ name: "profile" });
+          .then((response) => {
+            //Регистрация
+            if (response) {
+              this.$store
+                .dispatch(actionTypes.register, {
+                  firstName: this.form.firstName,
+                  lastName: this.form.lastName,
+                  mail: this.form.mail,
+                  password: this.form.password,
+                  role: "user",
+                  token: generateToken(),
+                })
+                .then(() => {
+                  this.$router.push({ name: "profile" });
+                });
+            }
           });
       }
     },

@@ -191,40 +191,7 @@
       <div class="main-section__right-block">
         <div class="friends-block">
           <h2>Friends</h2>
-          <div class="friends-container">
-            <div class="friends-item">
-              <div class="friend-item__photo"></div>
-              <p class="friend-item__name">Аня</p>
-            </div>
-            <div class="friends-item">
-              <div class="friend-item__photo"></div>
-              <p class="friend-item__name">Аня</p>
-            </div>
-            <div class="friends-item">
-              <div class="friend-item__photo"></div>
-              <p class="friend-item__name">Аня</p>
-            </div>
-            <div class="friends-item">
-              <div class="friend-item__photo"></div>
-              <p class="friend-item__name">Аня</p>
-            </div>
-            <div class="friends-item">
-              <div class="friend-item__photo"></div>
-              <p class="friend-item__name">Аня</p>
-            </div>
-            <div class="friends-item">
-              <div class="friend-item__photo"></div>
-              <p class="friend-item__name">Аня</p>
-            </div>
-            <div class="friends-item">
-              <div class="friend-item__photo"></div>
-              <p class="friend-item__name">Аня</p>
-            </div>
-            <div class="friends-item">
-              <div class="friend-item__photo"></div>
-              <p class="friend-item__name">Аня</p>
-            </div>
-          </div>
+          <div class="friends-container"></div>
         </div>
       </div>
     </main>
@@ -340,7 +307,7 @@ $default-shadow: 0 .1rem .1rem .3rem #e7e7e7
   margin-top: 1rem
   width: 100%
   display: grid
-  min-height: 30rem
+  min-height: 20rem
   grid-template-columns: repeat(4, 1fr)
   grid-template-rows: repeat(4, 1fr)
   grid-gap: 2rem

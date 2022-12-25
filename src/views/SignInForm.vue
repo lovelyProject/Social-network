@@ -9,6 +9,7 @@
           type="email"
           name=""
           placeholder="rosemarie@domain.com"
+          :disabled="isSubmiting"
           v-model="form.mail"
           :class="{
             'has-error': v$.form.mail.required.$invalid && v$.form.$dirty,
@@ -18,7 +19,7 @@
           class="form-error"
           v-if="v$.form.mail.required.$invalid && v$.form.$dirty"
         >
-          Обязательное поле
+          Required field
         </p>
       </div>
       <div class="form__input-block">
@@ -29,6 +30,7 @@
           name=""
           placeholder="********"
           v-model="form.password"
+          :disabled="isSubmiting"
           :class="{
             'has-error': v$.form.password.required.$invalid && v$.form.$dirty,
           }"
@@ -37,8 +39,9 @@
           class="form-error"
           v-if="v$.form.password.required.$invalid && v$.form.$dirty"
         >
-          Обязательное поле
+          Required field
         </p>
+        <p class="form-error" v-if="invalidLogin">Invalid login or password</p>
       </div>
       <div class="form__content toggle-block">
         <p>Don't have an account yet?</p>
@@ -93,7 +96,8 @@ export default {
             mail: this.form.mail,
             password: this.form.password,
           })
-          .then(() => {
+          .then((response) => {
+            console.log(response);
             this.$router.push({ name: "profile" });
           });
       }
@@ -102,6 +106,14 @@ export default {
   computed: {
     isSubmiting() {
       return this.$store.state.auth.isSubmiting;
+    },
+    invalidLogin() {
+      const flag = this.$store.state.auth.invalidLoginOrPass;
+      if (flag === null) {
+        return false;
+      } else {
+        return true;
+      }
     },
   },
 };

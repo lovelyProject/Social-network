@@ -21,6 +21,28 @@
         "token": "x5kz7n4pfsmtrofmjonl66l1iecj2gw4"
       },
       "id": 1
+    },
+    {
+      "user": {
+        "firstName": "edward",
+        "lastName": "konovalov",
+        "mail": "crfn4444@mail.ru",
+        "password": "1q2w3e4r",
+        "role": "user",
+        "token": "e3o7ic8kp9orwma8emtx36ms1x589m8y"
+      },
+      "id": 2
+    },
+    {
+      "user": {
+        "firstName": "Edward",
+        "lastName": "konovalov",
+        "mail": "crfn322@mail.ru",
+        "password": "1q2w3e4r",
+        "role": "user",
+        "token": "2xa9mvvdr2d67f5x3iwmcji3bj6xx1rd"
+      },
+      "id": 3
     }
   ]
 }
