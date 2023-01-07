@@ -187,6 +187,8 @@
             </div>
           </div>
         </div>
+        <!-- Посты -->
+        <vPost class="post" />
       </div>
       <div class="main-section__right-block">
         <div class="friends-block">
@@ -199,19 +201,29 @@
 </template>
 
 <script>
-// @ is an alias to /src
+import vPost from "@/components/v-post.vue";
 // import axios from "axios";
+import { mapGetters } from "vuex";
 export default {
   name: "HomeView",
-  components: {},
-  // async created() {
-  //   try {
-  //     const res = await axios.get("http://localhost:3000/users");
-  //     console.log(res);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // },
+  components: {
+    vPost,
+  },
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapGetters({
+      currentUser: "[auth] currentUser",
+    }),
+    // apiURL: `http://localhost:3000/posts?userId=${this.currentUser.id}`,
+  },
+  mounted() {
+    setTimeout(() => {
+      // this.$store.dispatch("GET_MY_POSTS_FROM_API", this.currentUser);
+      console.log(this.currentUser.id);
+    }, 1000);
+  },
 };
 </script>
 
@@ -320,4 +332,6 @@ $default-shadow: 0 .1rem .1rem .3rem #e7e7e7
   background: #777
 .friend-item__name
   text-align: center
+.post
+  margin-top: 2rem
 </style>

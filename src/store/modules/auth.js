@@ -2,10 +2,29 @@ import authApi from "@/api/auth";
 import { setItem } from "@/helpers/persistanceStorage";
 const state = {
   isSubmiting: false,
+  isLoading: false,
   currentUser: null,
   isLoggedIn: false,
   invalidLoginOrPass: null,
   findMail: null,
+};
+
+export const getterTypes = {
+  currentUser: "[auth] currentUser",
+  isLoggedIn: "[auth] isLoggedIn",
+  isAnonymous: "[auth] isAnonymous",
+};
+
+const getters = {
+  [getterTypes.currentUser]: (state) => {
+    return state.currentUser;
+  },
+  [getterTypes.isLoggedIn]: (state) => {
+    return Boolean(state.isLoggedIn);
+  },
+  [getterTypes.isAnonymous]: (state) => {
+    return state.isLoggedIn === false;
+  },
 };
 export const mutationTypes = {
   //register
@@ -22,6 +41,10 @@ export const mutationTypes = {
   loginFailure: "[auth] loginFailure",
   //logout
   logOut: "[auth] logOut",
+  //loading
+  getCurrentUserStart: "[auth] getCurrentUserStart",
+  getCurrentUserSuccess: "[auth] getCurrentUserSucces",
+  getCurrentUserFailure: "[auth] getCurrentUserFailure",
 };
 
 const mutations = {
@@ -63,8 +86,25 @@ const mutations = {
     state.isLoggedIn = null;
     state.invalidLoginOrPass = true;
   },
+  //logout
   [mutationTypes.logOut](state) {
     state.isLoggedIn = null;
+    state.currentUser = null;
+    localStorage.removeItem("accesToken");
+  },
+  //loading
+  [mutationTypes.getCurrentUserStart](state) {
+    state.isLoading = true;
+  },
+  [mutationTypes.getCurrentUserSuccess](state, payload) {
+    state.isLoading = false;
+    state.currentUser = payload;
+    state.isLoggedIn = true;
+  },
+  [mutationTypes.getCurrentUserFailure](state) {
+    state.isLoading = false;
+    state.isLoggedIn = false;
+    state.currentUser = null;
   },
 };
 
@@ -72,6 +112,7 @@ export const actionTypes = {
   register: "[auth] register",
   checkMail: "[auth] checkMail",
   login: "[auth] login",
+  getCurrentUser: "[auth] getCurrentUser",
 };
 
 const actions = {
@@ -151,9 +192,32 @@ const actions = {
         });
     });
   },
+  [actionTypes.getCurrentUser](context) {
+    return new Promise((resolve) => {
+      context.commit(mutationTypes.getCurrentUserStart);
+      authApi
+        .getCurrentUser()
+        .then((response) => {
+          let accesToken = JSON.parse(localStorage.getItem("accesToken"));
+          let dataUser;
+          for (let elem of response.data) {
+            if (elem.user.token === accesToken) {
+              dataUser = elem;
+              break;
+            }
+          }
+          context.commit(mutationTypes.getCurrentUserSuccess, dataUser);
+          resolve(response.data.user);
+        })
+        .catch(() => {
+          context.commit(mutationTypes.getCurrentUserFailure);
+        });
+    });
+  },
 };
 export default {
   state,
   mutations,
   actions,
+  getters,
 };

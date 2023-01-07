@@ -2,10 +2,11 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import MyProfile from "@/views/MyProfile";
 import SignIn from "@/views/SignInForm";
 import SignUp from "@/views/SignUpForm";
+import FeedComp from "@/views/FeedComp";
 
 const routes = [
   {
-    path: "/",
+    path: "/profile",
     name: "profile",
     component: MyProfile,
   },
@@ -18,6 +19,11 @@ const routes = [
     path: "/signUp",
     name: "signUp",
     component: SignUp,
+  },
+  {
+    path: "/",
+    name: "Feed",
+    component: FeedComp,
   },
 ];
 

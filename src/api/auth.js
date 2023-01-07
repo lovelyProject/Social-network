@@ -8,7 +8,11 @@ const login = () => {
   return axios.get("/users");
 };
 
+const getCurrentUser = () => {
+  return axios.get("/users");
+};
 export default {
   register,
   login,
+  getCurrentUser,
 };

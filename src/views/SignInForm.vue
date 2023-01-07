@@ -65,6 +65,7 @@
 import { useVuelidate } from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
 import { actionTypes } from "@/store/modules/auth";
+import { mapState } from "vuex";
 export default {
   setup() {
     return { v$: useVuelidate() };
@@ -104,17 +105,17 @@ export default {
     },
   },
   computed: {
-    isSubmiting() {
-      return this.$store.state.auth.isSubmiting;
-    },
-    invalidLogin() {
-      const flag = this.$store.state.auth.invalidLoginOrPass;
-      if (flag === null) {
-        return false;
-      } else {
-        return true;
-      }
-    },
+    ...mapState({
+      isSubmiting: (state) => state.auth.isSubmiting,
+      invalidLogin: (state) => {
+        const flag = state.auth.invalidLoginOrPass;
+        if (flag === null) {
+          return false;
+        } else {
+          return true;
+        }
+      },
+    }),
   },
 };
 </script>

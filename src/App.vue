@@ -4,7 +4,7 @@
       <div class="header-container">
         <router-link
           class="header__logo"
-          :to="{ name: 'profile' }"
+          :to="{ name: 'Feed' }"
           id="header-logo"
         >
           H<span style="color: #5932ea">a</span>ndshake
@@ -50,7 +50,7 @@
           <img src="./assets/pics/profile-photo.png" alt="profile-photo" />
         </div>
         <div class="profile-subcription">
-          <h1>Jessica</h1>
+          <h1>Edward</h1>
           <span>YOU</span>
         </div>
         <hr class="menu-line" />
@@ -145,7 +145,7 @@
           </svg>
         </router-link>
         <!-- News -->
-        <router-link class="menu__item" to="{ name: '' }"
+        <router-link class="menu__item" :to="{ name: 'Feed' }"
           ><svg
             class="menu__item-icon"
             version="1.1"
@@ -194,7 +194,7 @@
               />
             </g>
           </svg>
-          <span class="menu__item-text">News</span>
+          <span class="menu__item-text">Feed</span>
           <svg
             class="menu__item-arrow"
             viewBox="0 0 6 10"
@@ -218,29 +218,40 @@
   </div>
 </template>
 <script>
+import { mutationTypes } from "@/store/modules/auth";
+import { getterTypes } from "@/store/modules/auth";
+import { mapGetters } from "vuex";
+import { actionTypes } from "@/store/modules/auth";
+
 export default {
   computed: {
-    isLogIn() {
-      return this.$store.state.auth.isLoggedIn;
+    ...mapGetters({
+      currentUser: getterTypes.currentUser,
+      isLogIn: getterTypes.isLoggedIn,
+      isAnonymous: getterTypes.isAnonymous,
+    }),
+  },
+  methods: {
+    logOut() {
+      this.$store.commit(mutationTypes.logOut);
     },
   },
-  // methods: {
-  //   logOut() {
-  //     this.$store.commit(mutationTypes.logOut)
-  //   }
-  // }
+  mounted() {
+    this.$store.dispatch(actionTypes.getCurrentUser);
+  },
 };
 </script>
 <style lang="sass">
+html
+  font-size: 62.5%
 *, ::after, ::before
   margin: 0
   padding: 0
   box-sizing: border-box
+  font-size: 1.6rem
 
 h1,h2,h3,h4,h5,h6,span,p
   cursor: default
-html
-  font-size: 62.5%
 a
   color: black
   text-decoration: none
@@ -327,6 +338,8 @@ a
   &__logo
     font-weight: 700
     font-size: 2.4rem
+    & span
+      font-size: 2.4rem
 #sign-in-link
   background: white
   color: #5932EA
@@ -342,10 +355,12 @@ a
   display: flex
   align-items: center
   cursor: pointer
+  background-color: #fff
   span
     cursor: pointer
 .icon-log-out
   width: 3.2rem
   margin-right: .8rem
   cursor: pointer
+  background: white
 </style>
