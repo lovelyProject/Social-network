@@ -1,7 +1,8 @@
 <template>
   <div class="feed">
     <div class="feed__items">
-      <vPost v-for="post in GET_POSTS" :key="post.id" :post="post" />
+      <div v-if="isLoading" class="loading">loading...</div>
+      <vPost v-else v-for="post in feed" :key="post.id" :post="post" />
     </div>
     <div class="feed__sort-container">
       <div class="feed__sort">
@@ -20,21 +21,25 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import vPost from "@/components/v-post.vue";
-import { mapActions, mapGetters } from "vuex";
+import { actionTypes } from "@/store/modules/feed";
 export default {
   name: "GlobalFeed",
   components: {
     vPost,
   },
-  methods: {
-    ...mapActions(["GET_POSTS_FROM_API"]),
-  },
   computed: {
-    ...mapGetters(["GET_POSTS"]),
+    ...mapState({
+      isLoading: (state) => state.feed.isLoading,
+      feed: (state) => state.feed.posts,
+      error: (state) => state.feed.error,
+    }),
   },
   mounted() {
-    this.$store.dispatch("GET_POSTS_FROM_API");
+    this.$store.dispatch(actionTypes.getFeed, {
+      apiURL: "http://localhost:3000/posts",
+    });
   },
 };
 </script>
@@ -56,12 +61,16 @@ $purple: #5932EA
   width: 100%
   padding: 2rem
   font-size: 1.2rem
-  margin-bottom: 2rem
+  margin-top: 2rem
   &-header
     margin-bottom: 1.5rem
     font-size: 1.6rem
   &-footer
     margin-top: 1rem
+  &_spinner
+    display: flex
+    justify-content: center
+    margin-top: 2rem
   @include shadow-block
 .feed__sort-container
   width: 38%

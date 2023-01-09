@@ -1,4 +1,4 @@
-import postsApi from "@/api/feed.js";
+import feedApi from "@/api/feed.js";
 
 const state = {
   posts: [],
@@ -6,13 +6,44 @@ const state = {
   isLoading: false,
   error: null,
 };
+export const mutationTypes = {
+  getFeedStart: "[feed] Get feed start",
+  getFeedSucces: "[feed] Get feed success",
+  getFeedFailure: "[feed] Get feed failure",
+  //
+  getMyPostsStart: "[feed] Get my posts start",
+  getMyPostsSucces: "[feed] Get my posts success",
+  getMyPostsFailure: "[feed] Get my posts failure",
+};
 
-const mutations = {
-  SET_TO_POSTS: (state, payload) => {
-    state.posts = payload;
+export const actionTypes = {
+  getFeed: "[feed] Get feed",
+  getMyPosts: "[feed] Get my posts",
+};
+
+export const mutations = {
+  [mutationTypes.getFeedStart]: (state) => {
+    state.isLoading = true;
+    state.posts = null;
   },
-  SET_TO_MY_POSTS: (state, payload) => {
+  [mutationTypes.getFeedSucces]: (state, payload) => {
+    state.posts = payload;
+    state.isLoading = false;
+  },
+  [mutationTypes.getFeedFailure]: (state) => {
+    state.isLoading = false;
+  },
+  //My posts
+  [mutationTypes.getMyPostsStart]: (state) => {
+    state.isLoading = true;
+    state.myPosts = null;
+  },
+  [mutationTypes.getMyPostsSucces]: (state, payload) => {
     state.myPosts = payload;
+    state.isLoading = false;
+  },
+  [mutationTypes.getFeedFailure]: (state) => {
+    state.isLoading = false;
   },
 };
 
@@ -26,24 +57,33 @@ const getters = {
 };
 
 const actions = {
-  GET_POSTS_FROM_API({ commit }) {
-    return new Promise(() => {
-      postsApi
-        .getPosts()
+  [actionTypes.getFeed](context, { apiURL }) {
+    return new Promise((resolve) => {
+      context.commit(mutationTypes.getFeedStart);
+      feedApi
+        .getMyPosts(apiURL)
         .then((response) => {
-          commit("SET_TO_POSTS", response.data);
+          context.commit(mutationTypes.getFeedSucces, response.data);
+          resolve(response.data);
         })
         .catch((e) => {
           console.log("Can not get posts from API", e);
+          context.commit(mutationTypes.getFeedFailure);
         });
     });
   },
-  GET_MY_POSTS_FROM_API(context, credentials) {
-    return new Promise(() => {
-      console.log(credentials);
-      postsApi.getMyPosts(credentials).then((response) => {
-        context.commit("SET_TO_MY_POSTS", response.data);
-      });
+  [actionTypes.getMyPosts](context, { apiURL }) {
+    return new Promise((resolve) => {
+      context.commit(mutationTypes.getMyPostsStart);
+      feedApi
+        .getMyPosts(apiURL)
+        .then((response) => {
+          context.commit(mutationTypes.getMyPostsSucces, response.data);
+          resolve(response.data);
+        })
+        .catch((e) => {
+          console.log("Error to get my posts", e);
+        });
     });
   },
 };

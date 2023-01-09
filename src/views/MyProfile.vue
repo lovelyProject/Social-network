@@ -188,7 +188,14 @@
           </div>
         </div>
         <!-- Посты -->
-        <vPost class="post" />
+        <div v-if="isLoading" class="loading">loading...</div>
+        <vPost
+          v-else-if="myPosts"
+          class="post"
+          v-for="post in myPosts"
+          :key="post.id"
+          :post="post"
+        />
       </div>
       <div class="main-section__right-block">
         <div class="friends-block">
@@ -202,8 +209,8 @@
 
 <script>
 import vPost from "@/components/v-post.vue";
-// import axios from "axios";
-import { mapGetters } from "vuex";
+import { mapState } from "vuex";
+import { actionTypes } from "@/store/modules/feed";
 export default {
   name: "HomeView",
   components: {
@@ -213,16 +220,18 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters({
-      currentUser: "[auth] currentUser",
+    ...mapState({
+      currentUser: (state) => state.auth.currentUser,
+      currentUserId: (state) => state.auth.currentUser.id,
+      myPosts: (state) => state.feed.myPosts,
     }),
-    // apiURL: `http://localhost:3000/posts?userId=${this.currentUser.id}`,
   },
   mounted() {
     setTimeout(() => {
-      // this.$store.dispatch("GET_MY_POSTS_FROM_API", this.currentUser);
-      console.log(this.currentUser.id);
-    }, 1000);
+      this.$store.dispatch(actionTypes.getMyPosts, {
+        apiURL: `http://localhost:3000/posts?userId=${this.currentUserId}`,
+      });
+    }, 4000);
   },
 };
 </script>
