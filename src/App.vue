@@ -50,7 +50,7 @@
           <img src="./assets/pics/profile-photo.png" alt="profile-photo" />
         </div>
         <div class="profile-subcription">
-          <h1>Edward</h1>
+          <h1>{{ firstName }}</h1>
           <span>YOU</span>
         </div>
         <hr class="menu-line" />
@@ -222,6 +222,7 @@ import { mutationTypes } from "@/store/modules/auth";
 import { getterTypes } from "@/store/modules/auth";
 import { mapGetters } from "vuex";
 import { actionTypes } from "@/store/modules/auth";
+import { mapState } from "vuex";
 
 export default {
   computed: {
@@ -229,6 +230,9 @@ export default {
       currentUser: getterTypes.currentUser,
       isLogIn: getterTypes.isLoggedIn,
       isAnonymous: getterTypes.isAnonymous,
+    }),
+    ...mapState({
+      firstName: (state) => state.auth.currentUser.user.firstName,
     }),
   },
   methods: {

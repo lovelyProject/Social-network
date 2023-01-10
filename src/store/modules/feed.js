@@ -70,7 +70,7 @@ const actions = {
       feedApi
         .getMyPosts(apiURL)
         .then((response) => {
-          context.commit(mutationTypes.getFeedSucces, response.data);
+          context.commit(mutationTypes.getFeedSucces, response.data.reverse());
           resolve(response.data);
         })
         .catch((e) => {
@@ -85,7 +85,10 @@ const actions = {
       feedApi
         .getMyPosts(apiURL)
         .then((response) => {
-          context.commit(mutationTypes.getMyPostsSucces, response.data);
+          context.commit(
+            mutationTypes.getMyPostsSucces,
+            response.data.reverse()
+          );
           resolve(response.data);
         })
         .catch((e) => {
@@ -94,13 +97,14 @@ const actions = {
     });
   },
   [actionTypes.sendPost](context, credentials) {
-    return new Promise(() => {
+    return new Promise((resolve) => {
       context.commit(mutationTypes.sendPostStart);
       feedApi
         .createPost(credentials)
-        .then(() => {
+        .then((response) => {
           context.commit(mutationTypes.sendPostSucces);
           console.log("Succes create post");
+          resolve(response);
         })
         .catch((e) => {
           console.log("Can not create post", e);

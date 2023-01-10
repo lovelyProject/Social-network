@@ -240,14 +240,23 @@ export default {
     }, 500);
   },
   methods: {
-    sendPost() {
-      this.$store.dispatch(actionTypes.sendPost, {
-        body: this.postText,
-        title: `${this.currentUser.user.firstName} ${this.currentUser.user.lastName}`,
-        userId: this.currentUserId,
-        image: "",
-      });
-      this.postText = "";
+    async sendPost() {
+      if (this.postText) {
+        this.$store
+          .dispatch(actionTypes.sendPost, {
+            body: this.postText,
+            title: `${this.currentUser.user.firstName} ${this.currentUser.user.lastName}`,
+            userId: this.currentUserId,
+            image: "",
+          })
+          //Повторный запрос данных постов после создания
+          .then(() => {
+            this.$store.dispatch(actionTypes.getMyPosts, {
+              apiURL: `http://localhost:3000/posts?userId=${this.currentUserId}`,
+            });
+          });
+        this.postText = "";
+      }
     },
   },
 };
