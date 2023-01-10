@@ -20,6 +20,7 @@
           <textarea
             class="post-input"
             placeholder="What's on your mind?"
+            v-model="postText"
           ></textarea>
           <div class="post-items">
             <div class="post-item post-item-1">
@@ -138,6 +139,7 @@
             </div>
             <div class="post-item post-item-4">
               <svg
+                @click="sendPost()"
                 viewBox="0 0 32 32"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -189,13 +191,14 @@
         </div>
         <!-- Посты -->
         <div v-if="isLoading" class="loading">loading...</div>
-        <vPost
-          v-else-if="myPosts"
-          class="post"
-          v-for="post in myPosts"
-          :key="post.id"
-          :post="post"
-        />
+        <template v-if="myPosts">
+          <vPost
+            class="post"
+            v-for="post in myPosts"
+            :key="post.id"
+            :post="post"
+          />
+        </template>
       </div>
       <div class="main-section__right-block">
         <div class="friends-block">
@@ -217,13 +220,16 @@ export default {
     vPost,
   },
   data() {
-    return {};
+    return {
+      postText: "",
+    };
   },
   computed: {
     ...mapState({
       currentUser: (state) => state.auth.currentUser,
       currentUserId: (state) => state.auth.currentUser.id,
       myPosts: (state) => state.feed.myPosts,
+      isLoading: (state) => state.feed.isLoading,
     }),
   },
   mounted() {
@@ -231,7 +237,18 @@ export default {
       this.$store.dispatch(actionTypes.getMyPosts, {
         apiURL: `http://localhost:3000/posts?userId=${this.currentUserId}`,
       });
-    }, 4000);
+    }, 500);
+  },
+  methods: {
+    sendPost() {
+      this.$store.dispatch(actionTypes.sendPost, {
+        body: this.postText,
+        title: `${this.currentUser.user.firstName} ${this.currentUser.user.lastName}`,
+        userId: this.currentUserId,
+        image: "",
+      });
+      this.postText = "";
+    },
   },
 };
 </script>
@@ -304,8 +321,8 @@ $default-shadow: 0 .1rem .1rem .3rem #e7e7e7
   border: none
   font-family: "Poppins",sans-serif
   font-size: 1.8rem
-  &:focus
-    min-height: 15rem
+  // &:focus
+  //   min-height: 15rem
 .post-item
   width: 2.6rem
   height: 2.6rem

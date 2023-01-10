@@ -329,6 +329,7 @@ a
   top: 0
   width: 100%
   background-color: #fff
+  z-index: 10000000000
   &-container
     max-width: 192rem
     display: flex

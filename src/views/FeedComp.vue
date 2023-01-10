@@ -61,7 +61,7 @@ $purple: #5932EA
   width: 100%
   padding: 2rem
   font-size: 1.2rem
-  margin-top: 2rem
+  margin-bottom: 2rem
   &-header
     margin-bottom: 1.5rem
     font-size: 1.6rem
@@ -71,6 +71,12 @@ $purple: #5932EA
     display: flex
     justify-content: center
     margin-top: 2rem
+  &-image
+    text-align: center
+    margin-bottom: 1rem
+    margin-top: 1rem
+    img
+      width: 100%
   @include shadow-block
 .feed__sort-container
   width: 38%

@@ -5,6 +5,7 @@ const state = {
   myPosts: [],
   isLoading: false,
   error: null,
+  isPostSending: false,
 };
 export const mutationTypes = {
   getFeedStart: "[feed] Get feed start",
@@ -14,11 +15,16 @@ export const mutationTypes = {
   getMyPostsStart: "[feed] Get my posts start",
   getMyPostsSucces: "[feed] Get my posts success",
   getMyPostsFailure: "[feed] Get my posts failure",
+  //
+  sendPostStart: "[feed] send post start",
+  sendPostSucces: "[feed] send post success",
+  sendPostFailure: "[feed] send post failure",
 };
 
 export const actionTypes = {
   getFeed: "[feed] Get feed",
   getMyPosts: "[feed] Get my posts",
+  sendPost: "[feed] Send post",
 };
 
 export const mutations = {
@@ -45,14 +51,15 @@ export const mutations = {
   [mutationTypes.getFeedFailure]: (state) => {
     state.isLoading = false;
   },
-};
-
-const getters = {
-  GET_POSTS(state) {
-    return state.posts;
+  //send post
+  [mutationTypes.sendPostStart]: (state) => {
+    state.isPostSending = true;
   },
-  GET_MY_POSTS(state) {
-    return state.myPosts;
+  [mutationTypes.sendPostSucces]: (state) => {
+    state.isPostSending = false;
+  },
+  [mutationTypes.sendPostFailure]: (state) => {
+    state.isPostSending = false;
   },
 };
 
@@ -86,11 +93,25 @@ const actions = {
         });
     });
   },
+  [actionTypes.sendPost](context, credentials) {
+    return new Promise(() => {
+      context.commit(mutationTypes.sendPostStart);
+      feedApi
+        .createPost(credentials)
+        .then(() => {
+          context.commit(mutationTypes.sendPostSucces);
+          console.log("Succes create post");
+        })
+        .catch((e) => {
+          console.log("Can not create post", e);
+          context.commit(mutationTypes.sendPostFailure);
+        });
+    });
+  },
 };
 
 export default {
   state,
   actions,
-  getters,
   mutations,
 };

@@ -49,6 +49,7 @@
     {
       "userId": 0,
       "id": 1,
+      "image": "https://sun9-east.userapi.com/sun9-29/s/v1/ig2/AQc6N9TGIzoQLoBRuPeyMjh-hMriAkxsOhKDROr6F9eoV7vybHIaxREZhU93YpAFGhONrP6yjg7MxOOwq_hdI4Xs.jpg?size=810x1080&quality=96&type=album",
       "title": "Admin post",
       "body": "Genuis"
     },
@@ -61,6 +62,7 @@
     {
       "userId": 0,
       "id": 3,
+      "image": "https://sun9-west.userapi.com/sun9-72/s/v1/ig2/4KF7-7QQbowy1b8K0NGv_Qu20E55-AneDudp1Qairm2Br-G8dr9QrqRXL1lSPSN0OUOFHMn9KdT2s7dZlOuNXtDB.jpg?size=498x1080&quality=95&type=album",
       "title": "Admin post",
       "body": "et iusto sed quo iure\nvoluptatem occaecati omnis eligendi aut ad\nvoluptatem doloribus vel accusantium quis pariatur\nmolestiae porro eius odio et labore et velit aut"
     },
@@ -645,6 +647,20 @@
       "id": 100,
       "title": "at nam consequatur ea labore ea harum",
       "body": "cupiditate quo est a modi nesciunt soluta\nipsa voluptas error itaque dicta in\nautem qui minus magnam et distinctio eum\naccusamus ratione error aut"
+    },
+    {
+      "body": "Мой первый тестовый пост",
+      "title": "Jessica Richardson",
+      "userId": 0,
+      "image": "",
+      "id": 101
+    },
+    {
+      "body": "Мой второй тестовый пост",
+      "title": "Jessica Richardson",
+      "userId": 0,
+      "image": "",
+      "id": 102
     }
   ]
 }
