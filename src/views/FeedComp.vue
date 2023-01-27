@@ -6,7 +6,12 @@
         Server isn't available now, please try again later
       </div>
       <vPost v-else v-for="post in feed" :key="post.id" :post="post" />
-      <vPagination :total="total" :limit="limit" :current-page="currentPage" />
+      <vPagination
+        :total="total"
+        :limit="limit"
+        :current-page="currentPage"
+        :url="baseUrl"
+      />
     </div>
     <div class="feed__sort-container">
       <div class="feed__sort" v-if="isServerAvailable">
@@ -29,6 +34,7 @@ import { mapState } from "vuex";
 import vPost from "@/components/v-post.vue";
 import { actionTypes } from "@/store/modules/feed";
 import vPagination from "@/components/v-pagination.vue";
+import { limit } from "@/helpers/vars.js";
 
 export default {
   name: "GlobalFeed",
@@ -38,9 +44,9 @@ export default {
   },
   data() {
     return {
-      limit: 10,
-      currentPage: 1,
+      limit,
       total: 0,
+      url: "/",
     };
   },
   computed: {
@@ -50,6 +56,12 @@ export default {
       error: (state) => state.feed.error,
       isServerAvailable: (state) => state.feed.isServerAvailable,
     }),
+    currentPage() {
+      return parseInt(this.$route.query.page || "1");
+    },
+    baseUrl() {
+      return this.$router.path;
+    },
   },
   mounted() {
     this.$store
