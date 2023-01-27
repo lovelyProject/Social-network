@@ -81,7 +81,7 @@
           </svg>
         </router-link>
         <!-- My messages -->
-        <router-link class="menu__item" to="{ name: '' }">
+        <router-link class="menu__item" :to="{ name: 'MyChats' }">
           <svg
             class="menu__item-icon"
             viewBox="0 0 24 24"
@@ -107,7 +107,7 @@
           </svg>
         </router-link>
         <!-- My friends -->
-        <router-link class="menu__item" to="{ name: '' }"
+        <router-link class="menu__item" :to="{ name: 'MyFriends' }"
           ><svg
             class="menu__item-icon"
             viewBox="0 0 24 24"

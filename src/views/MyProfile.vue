@@ -42,6 +42,7 @@
             </div>
             <div class="post-item post-item-2">
               <svg
+                @click="uploadFile"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -214,6 +215,7 @@
 import vPost from "@/components/v-post.vue";
 import { mapState } from "vuex";
 import { actionTypes } from "@/store/modules/feed";
+
 export default {
   name: "HomeView",
   components: {
@@ -257,6 +259,10 @@ export default {
           });
         this.postText = "";
       }
+    },
+    uploadFile() {
+      // const apiKey = "A5Vp4El2WTKUTDT2mCyvMz";
+      // const client = filestack.init(apiKey);
     },
   },
 };

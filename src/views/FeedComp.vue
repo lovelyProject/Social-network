@@ -2,12 +2,16 @@
   <div class="feed">
     <div class="feed__items">
       <div v-if="isLoading" class="loading">loading...</div>
+      <div class="" v-if="isServerAvailable === false">
+        Server isn't available now, please try again later
+      </div>
       <vPost v-else v-for="post in feed" :key="post.id" :post="post" />
+      <vPagination :total="total" :limit="limit" :current-page="currentPage" />
     </div>
     <div class="feed__sort-container">
-      <div class="feed__sort">
+      <div class="feed__sort" v-if="isServerAvailable">
         <h3>Filter by:</h3>
-        <div class="feed__sort-item">likes</div>
+        <div class="feed__sort-item">{{ feed.length }}</div>
         <div class="feed__sort-item">favourites</div>
         <div class="feed__sort-item">sort by likes</div>
         <div class="feed__sort-item">sort by likes</div>
@@ -24,22 +28,37 @@
 import { mapState } from "vuex";
 import vPost from "@/components/v-post.vue";
 import { actionTypes } from "@/store/modules/feed";
+import vPagination from "@/components/v-pagination.vue";
+
 export default {
   name: "GlobalFeed",
   components: {
     vPost,
+    vPagination,
+  },
+  data() {
+    return {
+      limit: 10,
+      currentPage: 1,
+      total: 0,
+    };
   },
   computed: {
     ...mapState({
       isLoading: (state) => state.feed.isLoading,
       feed: (state) => state.feed.posts,
       error: (state) => state.feed.error,
+      isServerAvailable: (state) => state.feed.isServerAvailable,
     }),
   },
   mounted() {
-    this.$store.dispatch(actionTypes.getFeed, {
-      apiURL: "http://localhost:3000/posts",
-    });
+    this.$store
+      .dispatch(actionTypes.getFeed, {
+        apiURL: "http://localhost:3000/posts",
+      })
+      .then((response) => {
+        this.total = response.length;
+      });
   },
 };
 </script>
@@ -76,7 +95,7 @@ $purple: #5932EA
     margin-bottom: 1rem
     margin-top: 1rem
     img
-      width: 100%
+      width: 50%
   @include shadow-block
 .feed__sort-container
   width: 38%

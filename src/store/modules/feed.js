@@ -6,6 +6,7 @@ const state = {
   isLoading: false,
   error: null,
   isPostSending: false,
+  isServerAvailable: null,
 };
 export const mutationTypes = {
   getFeedStart: "[feed] Get feed start",
@@ -35,8 +36,10 @@ export const mutations = {
   [mutationTypes.getFeedSucces]: (state, payload) => {
     state.posts = payload;
     state.isLoading = false;
+    state.isServerAvailable = true;
   },
   [mutationTypes.getFeedFailure]: (state) => {
+    state.isServerAvailable = false;
     state.isLoading = false;
   },
   //My posts
@@ -48,7 +51,7 @@ export const mutations = {
     state.myPosts = payload;
     state.isLoading = false;
   },
-  [mutationTypes.getFeedFailure]: (state) => {
+  [mutationTypes.getMyPostsFailure]: (state) => {
     state.isLoading = false;
   },
   //send post
