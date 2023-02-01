@@ -16,7 +16,7 @@
     <div class="feed__sort-container">
       <div class="feed__sort" v-if="isServerAvailable">
         <h3>Filter by:</h3>
-        <div class="feed__sort-item">{{ feed.length }}</div>
+        <div class="feed__sort-item"></div>
         <div class="feed__sort-item">favourites</div>
         <div class="feed__sort-item">sort by likes</div>
         <div class="feed__sort-item">sort by likes</div>
@@ -35,6 +35,7 @@ import vPost from "@/components/v-post.vue";
 import { actionTypes } from "@/store/modules/feed";
 import vPagination from "@/components/v-pagination.vue";
 import { limit } from "@/helpers/vars.js";
+import queryString from "query-string";
 
 export default {
   name: "GlobalFeed",
@@ -47,7 +48,13 @@ export default {
       limit,
       total: 0,
       url: "/",
+      apiUrl: "http://localhost:3000/posts",
     };
+  },
+  watch: {
+    currentPage() {
+      this.fetchFeed();
+    },
   },
   computed: {
     ...mapState({
@@ -62,15 +69,34 @@ export default {
     baseUrl() {
       return this.$router.path;
     },
+    offset() {
+      return (this.currentPage - 1) * this.limit;
+    },
+  },
+  methods: {
+    fetchFeed() {
+      const parsedUrl = queryString.parseUrl(this.apiUrl);
+      const stringifyParams = queryString.stringify({
+        _start: this.offset,
+        _limit: limit,
+        ...parsedUrl.query,
+      });
+      const apiUrlWithParams = `${parsedUrl.url}?${stringifyParams}`;
+      console.log(apiUrlWithParams);
+      this.$store
+        .dispatch(actionTypes.getFeed, {
+          apiURL: this.apiUrl,
+        })
+        .then((response) => {
+          this.total = response === null ? 0 : response.length;
+        });
+      this.$store.dispatch(actionTypes.getFeed, {
+        apiURL: apiUrlWithParams,
+      });
+    },
   },
   mounted() {
-    this.$store
-      .dispatch(actionTypes.getFeed, {
-        apiURL: "http://localhost:3000/posts",
-      })
-      .then((response) => {
-        this.total = response.length;
-      });
+    this.fetchFeed();
   },
 };
 </script>

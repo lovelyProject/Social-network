@@ -224,6 +224,7 @@ export default {
   data() {
     return {
       postText: "",
+      apiUrl: "http://localhost:3000/posts",
     };
   },
   computed: {
@@ -237,7 +238,7 @@ export default {
   mounted() {
     setTimeout(() => {
       this.$store.dispatch(actionTypes.getMyPosts, {
-        apiURL: `http://localhost:3000/posts?userId=${this.currentUserId}`,
+        apiURL: `${this.apiUrl}?userId=${this.currentUserId}`,
       });
     }, 500);
   },
