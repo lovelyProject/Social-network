@@ -81,7 +81,7 @@
         />
       </svg>
     </div>
-    <Comment />
+    <Comment :comments="post.comments" />
   </div>
 </template>
 

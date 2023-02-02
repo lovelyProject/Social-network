@@ -1,7 +1,11 @@
 <template>
   <div class="vpost-comments">
     <hr class="comment-line" />
-    <div class="vpost-comment-container">
+    <div
+      class="vpost-comment-item"
+      v-for="(comment, idx) in comments"
+      :key="idx"
+    >
       <div class="vpost-comment">
         <div class="vpost-comment-logo">
           <img
@@ -11,19 +15,38 @@
           />
         </div>
         <div class="vpost-comment-content">
-          <h3 class="vpost-comment-title">Jess</h3>
+          <h3 class="vpost-comment-title">{{ comment.title }}</h3>
           <p class="vpost-comment-text">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo,
-            debitis. Suscipit nihil sit reiciendis tenetur quasi obcaecati quia
-            quidem aperiam possimus magnam, sint, ipsam nostrum et soluta eaque
-            illo? Delectus.
+            {{ comment.body }}
           </p>
+          <hr class="comment-line" />
         </div>
       </div>
     </div>
+    <Reply />
   </div>
 </template>
 
+<script>
+import { mapState } from "vuex";
+import Reply from "@/components/v-replyBox.vue";
+export default {
+  name: "vpost-comments",
+  computed: {
+    ...mapState({
+      currentUser: (state) => state.auth.currentUser,
+    }),
+  },
+  components: {
+    Reply,
+  },
+  props: {
+    comments: {
+      type: Array,
+    },
+  },
+};
+</script>
 <style lang="sass">
 .comment
   &-line
@@ -37,11 +60,12 @@
       width: 100%
   &-title
     font-size: 1.4rem
-    font-weight: 500
+    font-weight: 600
+    margin-bottom: .5rem
   &-content
     margin-left: 1rem
     padding: 0 0 .7rem 0
-    flex-basis: 100%
+    flex-basis: 95%
   &-text
     font-size: 1.4rem
 </style>

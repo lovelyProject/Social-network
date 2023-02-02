@@ -681,7 +681,21 @@
       "title": "Jessica Richardson",
       "userId": 0,
       "image": "",
-      "id": 105
+      "id": 105,
+      "comments": [
+        {
+          "body": "first comment",
+          "title": "Jessica Richardson",
+          "userId": 0,
+          "image": ""
+        },
+        {
+          "body": "second comment",
+          "title": "Jessica Richardson",
+          "userId": 0,
+          "image": ""
+        }
+      ] 
     }
   ]
 }
