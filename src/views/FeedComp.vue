@@ -5,7 +5,13 @@
       <div class="" v-if="isServerAvailable === false">
         Server isn't available now, please try again later
       </div>
-      <vPost v-else v-for="post in feed" :key="post.id" :post="post" />
+      <vPost
+        v-else
+        v-for="post in feed"
+        :key="post.id"
+        :post="post"
+        @click="showInfo(post)"
+      />
       <vPagination
         :total="total"
         :limit="limit"
@@ -94,6 +100,9 @@ export default {
         apiURL: apiUrlWithParams,
       });
     },
+    showInfo(item) {
+      console.log(item);
+    },
   },
   mounted() {
     this.fetchFeed();
@@ -143,12 +152,4 @@ $purple: #5932EA
   width: 100%
   padding: 2rem
   font-size: 2rem
-.post-icon
-  width: 2.4rem
-  height: 2.4rem
-.post-comment
-  fill: none
-.post-like
-  stroke: $purple
-  fill: $purple
 </style>
